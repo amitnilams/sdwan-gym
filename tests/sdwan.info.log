@@ -1,0 +1,63 @@
+2018-12-05 19:51:40,528 - root - INFO - SdwanEnv - Version 0.1.0
+2018-12-05 19:52:03,470 - root - INFO - SdwanEnv - Version 0.1.0
+2018-12-05 19:52:34,773 - root - INFO - current bw:5.25, sla bw:6
+2018-12-05 19:52:34,773 - root - INFO - BW is less than SLA
+2018-12-05 19:52:49,805 - root - INFO - current bw:10.0, sla bw:6
+2018-12-05 19:53:04,853 - root - INFO - current bw:10.0, sla bw:6
+2018-12-05 19:53:19,910 - root - INFO - current bw:4.28, sla bw:6
+2018-12-05 19:53:19,911 - root - INFO - BW is less than SLA
+2018-12-05 19:53:34,980 - root - INFO - current bw:10.0, sla bw:6
+2018-12-05 19:53:50,016 - root - INFO - current bw:10.0, sla bw:6
+2018-12-05 19:54:05,052 - root - INFO - current bw:10.0, sla bw:6
+2018-12-05 19:54:20,075 - root - INFO - current bw:10.0, sla bw:6
+2018-12-05 19:54:35,111 - root - INFO - current bw:10.0, sla bw:6
+2018-12-05 19:54:50,137 - root - INFO - current bw:10.0, sla bw:6
+2018-12-05 19:55:05,161 - root - INFO - current bw:10.0, sla bw:6
+2018-12-05 19:55:20,200 - root - INFO - current bw:5.59, sla bw:6
+2018-12-05 19:55:20,201 - root - INFO - BW is less than SLA
+2018-12-05 19:55:35,242 - root - INFO - current bw:3.46, sla bw:6
+2018-12-05 19:55:35,243 - root - INFO - BW is less than SLA
+2018-12-05 19:55:50,288 - root - INFO - current bw:10.0, sla bw:6
+2018-12-05 20:01:34,085 - root - INFO - SdwanEnv - Version 0.1.0
+2018-12-05 20:02:05,375 - root - INFO - current bw:5.25, sla bw:6.0
+2018-12-05 20:02:20,431 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:02:35,465 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:02:50,616 - root - INFO - current bw:4.00, sla bw:6.0
+2018-12-05 20:03:05,670 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:03:20,700 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:03:35,733 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:03:50,768 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:05:46,466 - root - INFO - SdwanEnv - Version 0.1.0
+2018-12-05 20:06:17,781 - root - INFO - current bw:5.31, sla bw:6.0
+2018-12-05 20:06:17,781 - root - INFO - BW is less than SLA
+2018-12-05 20:06:32,817 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:06:47,837 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:07:02,872 - root - INFO - current bw:4.24, sla bw:6.0
+2018-12-05 20:07:02,873 - root - INFO - BW is less than SLA
+2018-12-05 20:07:17,937 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:07:32,971 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:07:48,007 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:08:03,032 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:08:18,073 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:08:33,098 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:08:48,151 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:09:03,186 - root - INFO - current bw:7.29, sla bw:6.0
+2018-12-05 20:09:18,223 - root - INFO - current bw:4.57, sla bw:6.0
+2018-12-05 20:09:18,224 - root - INFO - BW is less than SLA
+2018-12-05 20:09:33,261 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:09:48,365 - root - INFO - current bw:4.59, sla bw:6.0
+2018-12-05 20:09:48,367 - root - INFO - BW is less than SLA
+2018-12-05 20:10:03,602 - root - INFO - current bw:6.07, sla bw:6.0
+2018-12-05 20:10:18,644 - root - INFO - current bw:3.56, sla bw:6.0
+2018-12-05 20:10:18,645 - root - INFO - BW is less than SLA
+2018-12-05 20:10:33,681 - root - INFO - current bw:7.16, sla bw:6.0
+2018-12-05 20:10:48,705 - root - INFO - current bw:8.03, sla bw:6.0
+2018-12-05 20:11:03,752 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:11:18,872 - root - INFO - current bw:2.06, sla bw:6.0
+2018-12-05 20:11:18,873 - root - INFO - BW is less than SLA
+2018-12-05 20:11:33,955 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:11:48,988 - root - INFO - current bw:10.0, sla bw:6.0
+2018-12-05 20:12:04,063 - root - INFO - current bw:4.69, sla bw:6.0
+2018-12-05 20:12:04,064 - root - INFO - BW is less than SLA
+2018-12-05 20:12:19,124 - root - INFO - current bw:3.33, sla bw:6.0
+2018-12-05 20:12:19,125 - root - INFO - BW is less than SLA

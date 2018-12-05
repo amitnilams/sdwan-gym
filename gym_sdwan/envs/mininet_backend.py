@@ -14,11 +14,11 @@ import numpy as np
 class MininetBackEnd(object):
 
 	def init_params(self, mu, sigma, link_bw, sla_bw):
-		self.mu = mu
-		self.sigma = sigma
-		self.sla_bw = sla_bw
+		self.mu = float(mu)
+		self.sigma = float(sigma)
+		self.sla_bw = float(sla_bw)
 
-		self.link_bw = link_bw
+		self.link_bw = float(link_bw)
 		self.current_link_failure = False
 		self.previous_link_failure = False
 
@@ -100,7 +100,7 @@ class MininetBackEnd(object):
 		self.take_measurements()
 
 
-	def stopNet(self):
+	def cleanup(self):
 		self.net.stop()
 
 
@@ -190,7 +190,7 @@ class MininetBackEnd(object):
 
 
 
-	def switchLink(self, action):
+	def switch_link(self, action):
 
 		# if action specifies same link s before it is not a switch
 		if action != self.active_link:
@@ -208,12 +208,12 @@ class MininetBackEnd(object):
 
 		# if current bandwidth less than SLA it is a failure
 		if self.active_link == 0:
-			  if self.current_bw < self.sla_bw:
+			  if float(self.current_bw) < float(self.sla_bw):
 					self.current_link_failure = True
 
-		if self.current_link_failure == True:
-			if  self.previous_link_failure == True:
-				self.episode_over = True
+					# if it failed in previous tick also, mark it a link failure
+					if  self.previous_link_failure == True:
+						self.episode_over = True
 			
 		# copy current to previous
 		self.previous_link_failure = self.current_link_failure 
@@ -232,17 +232,17 @@ if __name__ == '__main__':
 	be = MininetBackEnd(mu=5, sigma=2, link_bw=10, sla_bw=6, seed=100)
 	be.print_state()
 
-	be.switchLink(action=1)
+	be.switch_link(action=1)
 	be.print_state()
 
-	be.switchLink(action=0)
+	be.switch_link(action=0)
 	be.print_state()
 
-	be.switchLink(action=1)
+	be.switch_link(action=1)
 	be.print_state()
 
-	be.switchLink(action=0)
+	be.switch_link(action=0)
 	be.print_state()
 
-	be.stopNet()
+	be.cleanup()
  

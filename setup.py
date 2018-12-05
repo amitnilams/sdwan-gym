@@ -7,4 +7,3 @@ setup(name='gym_sdwan',
                         'pandas',
                         'cfg_load']
       )
-~   

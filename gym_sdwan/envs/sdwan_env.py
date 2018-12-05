@@ -19,6 +19,8 @@ import cfg_load
 import gym
 import numpy as np
 
+from mininet_backend import MininetBackEnd
+
 
 path = 'config.yaml'  # always use slash in packages
 filepath = pkg_resources.resource_filename('gym_sdwan', path)
@@ -40,18 +42,33 @@ class SdwanEnv(gym.Env):
 
         # General variables defining the environment
 
-        self.backend = MininetBackEnd(mu=5, sigma=2, link_bw = 10, seed=100)
+        self.LINK_BW = 10.0
+        self.LINK_SELECT_ACTION_INTERNET = 0
+        self.LINK_SELECT_ACTION_MPLS = 1
+
+        self.backend = MininetBackEnd(mu=5, sigma=2, link_bw=self.LINK_BW, sla_bw=6, seed=100)
 
         # Define what the agent can do
         # Choose link1 or Link2 
         self.action_space = spaces.Discrete(2)
 
         # Observation 
-				self.observation_space = spaces.Box(low=-1, high=1,
-                                            shape=(self.env.getStateSize()))
+
+        low = np.array([0.0,  # active link
+                        0.0,  #current_bw
+                        0.0,  #available bw
+                        ])
+        high = np.array([self.LINK_SELECT_ACTION_MPLS, self.LINK_BW, self.LINK_BW])
+
+        self.observation_space = spaces.Box(low, high, dtype=np.float32)
 
 			  # episode over 
-				self.episode_over = False
+        self.episode_over = False
+
+        # Store what the agent tried
+        self.curr_episode = -1
+        self.action_episode_memory = []
+
 
 
 
@@ -86,29 +103,34 @@ class SdwanEnv(gym.Env):
                  However, official evaluations of your agent are not allowed to
                  use this for learning.
         """
-        self.curr_step += 1
-        self._take_action(action)
-        reward = self._get_reward()
-        ob = self._get_state()
+        self.take_action(action)
+        reward = self.get_reward()
+        ob = self.get_state()
         return ob, reward, self.episode_over, {}
 
-    def _take_action(self, action):
-			self.episode_over = self.backend.switch_link(action)
+    def take_action(self, action):
+			  self.episode_over = self.backend.switch_link(action)
 
-    def _get_reward(self):
-				reward = 0
+    def get_reward(self):
+				logging.info('current bw:{0}, sla bw:{1}'.format(self.backend.current_bw, 
+														self.backend.sla_bw))
+				# reward for surviving this 'tick'
+				reward = 1
 
 				# every time we use the MPLS link reward is deducted
 				if self.backend.active_link == 1:
 					reward -= 1
 
 				# check bandwidth for internet link - if less than SLA then penalize
-				else if self.backend.current_bw < self.sla_bw:
+				elif float(self.backend.current_bw)  <   float(self.backend.sla_bw):
+					logging.info('BW is less than SLA')
 					reward -= 2
 
 				# everything fine - reward up
 				else:
 					reward += 1
+
+				return reward
 				
 
     def reset(self):
@@ -121,12 +143,12 @@ class SdwanEnv(gym.Env):
         """
         self.curr_episode += 1
         self.action_episode_memory.append([])
-        return self._get_state()
+        return self.get_state()
 
-    def _render(self, mode='human', close=False):
+    def render(self, mode='human', close=False):
         return
 
-    def _get_state(self):
+    def get_state(self):
         """Get the observation.  it is a tuple """
         ob = (self.backend.active_link, self.backend.current_bw,  self.backend.available_bw)
         return ob
@@ -134,3 +156,9 @@ class SdwanEnv(gym.Env):
     def seed(self, seed):
         random.seed(seed)
         np.random.seed
+
+
+    def cleanup(self):
+        self.backend.cleanup()
+
+
