@@ -46,7 +46,7 @@ class SdwanEnv(gym.Env):
         self.LINK_SELECT_ACTION_INTERNET = 0
         self.LINK_SELECT_ACTION_MPLS = 1
 
-        self.backend = MininetBackEnd(mu=5, sigma=2, link_bw=self.LINK_BW, sla_bw=6, seed=100)
+        self.backend = MininetBackEnd(mu=4, sigma=2, link_bw=self.LINK_BW, sla_bw=6, seed=100)
 
         # Define what the agent can do
         # Choose link1 or Link2 
@@ -119,12 +119,12 @@ class SdwanEnv(gym.Env):
 
 				# every time we use the MPLS link reward is deducted
 				if self.backend.active_link == 1:
-					reward -= 1
+					reward -= 2
 
 				# check bandwidth for internet link - if less than SLA then penalize
 				elif float(self.backend.current_bw)  <   float(self.backend.sla_bw):
 					logging.info('BW is less than SLA')
-					reward -= 2
+					reward -= 5
 
 				# everything fine - reward up
 				else:

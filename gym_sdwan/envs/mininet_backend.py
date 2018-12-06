@@ -136,6 +136,9 @@ class MininetBackEnd(object):
 		# always measure internet link available bw
 		self.available_bw = float(self.link_bw) - float(self.read_udp_bw())
 
+		if self.available_bw < 0.0:
+			self.available_bw = 0.0
+
 		## we measure  internet link only, MPLS link => full BW 
 		if self.active_link == 0:   
 			self.current_bw = self.read_tcp_bw()
@@ -149,7 +152,8 @@ class MininetBackEnd(object):
 		with open('/tmp/tcp_client.log') as f:
 			for line in f:
 				#print ('line = ', line)
-				if 'Mbits' in line:
+				if 'bits/sec' in line:
+					line = line.replace('-', ' ')
 					fields = line.strip().split()
 					# Array indices start at 0 unlike AWK
 
@@ -165,12 +169,13 @@ class MininetBackEnd(object):
 		with open('/tmp/udp_client.log') as f:
 			for line in f:
 				#print ('line = ', line)
-				if 'Mbits' in line:
+				if 'bits/sec' in line:
+					line = line.replace('-', ' ')
 					fields = line.strip().split()
 					# Array indices start at 0 unlike AWK
 	
-					if len(fields) > 6:
-						bw.append(fields[6])
+					if len(fields) > 7:
+						bw.append(fields[7])
 
 		#print(bw[-1])
 		return(bw[-1])
