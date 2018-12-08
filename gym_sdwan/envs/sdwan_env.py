@@ -19,7 +19,7 @@ import cfg_load
 import gym
 import numpy as np
 
-from mininet_backend import MininetBackEnd
+from gym_sdwan.envs.mininet_backend import MininetBackEnd
 
 
 path = 'config.yaml'  # always use slash in packages
@@ -112,25 +112,26 @@ class SdwanEnv(gym.Env):
 			  self.episode_over = self.backend.switch_link(action)
 
     def get_reward(self):
-				logging.info('current bw:{0}, sla bw:{1}'.format(self.backend.current_bw, 
-														self.backend.sla_bw))
-				# reward for surviving this 'tick'
-				reward = 1
 
-				# every time we use the MPLS link reward is deducted
-				if self.backend.active_link == 1:
-					reward -= 2
+        logging.info('current bw:{0}, sla bw:{1}'.format(self.backend.current_bw, 
+            self.backend.sla_bw))
+        # reward for surviving this 'tick'
+        reward = 1
 
-				# check bandwidth for internet link - if less than SLA then penalize
-				elif float(self.backend.current_bw)  <   float(self.backend.sla_bw):
-					logging.info('BW is less than SLA')
-					reward -= 5
+        # every time we use the MPLS link reward is deducted
+        if self.backend.active_link == 1:
+            reward -= 2
 
-				# everything fine - reward up
-				else:
-					reward += 1
+        # check bandwidth for internet link - if less than SLA then penalize
+        elif float(self.backend.current_bw)  <   float(self.backend.sla_bw):
+            logging.info('BW is less than SLA')
+            reward -= 5
 
-				return reward
+        # everything fine - reward up
+        else:
+            reward += 1
+
+        return reward
 				
 
     def reset(self):
