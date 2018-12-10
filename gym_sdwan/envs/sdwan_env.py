@@ -36,7 +36,7 @@ class SdwanEnv(gym.Env):
     availability 
     """
 
-    def __init__(self):
+    def __init__(self, max_ticks=30):
         self.__version__ = "0.1.0"
         logging.info("SdwanEnv - Version {}".format(self.__version__))
 
@@ -45,6 +45,7 @@ class SdwanEnv(gym.Env):
         self.LINK_BW = 10.0
         self.LINK_SELECT_ACTION_INTERNET = 0
         self.LINK_SELECT_ACTION_MPLS = 1
+        self.MAX_TICKS = max_ticks
 
         self.backend = MininetBackEnd(mu=4, sigma=2, link_bw=self.LINK_BW, sla_bw=6, seed=100)
 
@@ -54,7 +55,7 @@ class SdwanEnv(gym.Env):
 
         # Observation 
 
-        low = np.array([0.0,  # active link
+        low = np.array([self.LINK_SELECT_ACTION_INTERNET,  # active link
                         0.0,  #current_bw
                         0.0,  #available bw
                         ])
@@ -62,16 +63,13 @@ class SdwanEnv(gym.Env):
 
         self.observation_space = spaces.Box(low, high, dtype=np.float32)
 
-			  # episode over 
+        # episode over 
         self.episode_over = False
+        
 
         # Store what the agent tried
         self.curr_episode = -1
         self.action_episode_memory = []
-
-
-
-
 
     def step(self, action):
         """
@@ -109,7 +107,13 @@ class SdwanEnv(gym.Env):
         return ob, reward, self.episode_over, {}
 
     def take_action(self, action):
-			  self.episode_over = self.backend.switch_link(action)
+        self.episode_over = self.backend.switch_link(action)
+                
+        self.ticks += 1
+        # Stop if max ticks over
+        if self.ticks == self.MAX_TICKS:
+            print ('Max ticks over, ending episode')
+            self.episode_over = True
 
     def get_reward(self):
 
@@ -132,7 +136,7 @@ class SdwanEnv(gym.Env):
             reward += 1
 
         return reward
-				
+
 
     def reset(self):
         """
@@ -143,7 +147,9 @@ class SdwanEnv(gym.Env):
         observation (object): the initial observation of the space.
         """
         self.curr_episode += 1
+        self.ticks = 0
         self.action_episode_memory.append([])
+        self.backend.reset_links()
         return self.get_state()
 
     def render(self, mode='human', close=False):
