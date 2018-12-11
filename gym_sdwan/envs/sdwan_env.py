@@ -112,13 +112,12 @@ class SdwanEnv(gym.Env):
         self.ticks += 1
         # Stop if max ticks over
         if self.ticks == self.MAX_TICKS:
-            print ('Max ticks over, ending episode')
+            logging.info ('Max ticks over, ending episode')
             self.episode_over = True
 
     def get_reward(self):
 
-        logging.info('current bw:{0}, sla bw:{1}'.format(self.backend.current_bw, 
-            self.backend.sla_bw))
+        logging.debug('current bw:{0}, sla bw:{1}'.format(self.backend.current_bw, self.backend.sla_bw))
         # reward for surviving this 'tick'
         reward = 1
 
@@ -128,7 +127,7 @@ class SdwanEnv(gym.Env):
 
         # check bandwidth for internet link - if less than SLA then penalize
         elif float(self.backend.current_bw)  <   float(self.backend.sla_bw):
-            logging.info('BW is less than SLA')
+            logging.debug('BW is less than SLA')
             reward -= 5
 
         # everything fine - reward up

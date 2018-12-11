@@ -19,12 +19,7 @@ class MininetBackEnd(object):
         self.sla_bw = float(sla_bw)
 
         self.link_bw = float(link_bw)
-#         self.current_link_failure = False
-#         self.previous_link_failure = False
-
-#         self.active_link = 0 # internet by default
-#         self.episode_over = False
-        
+     
     def reset_links(self):
         self.current_link_failure = False
         self.previous_link_failure = False
@@ -214,12 +209,12 @@ class MininetBackEnd(object):
         # if current bandwidth less than SLA it is a failure
         if self.active_link == 0:
             if float(self.current_bw) < float(self.sla_bw):
-                print ('current link failure')
+                info ('current link failure')
                 self.current_link_failure = True
 
                 # if it failed in previous tick also, mark it a link failure
                 if  self.previous_link_failure == True:
-                    print ('previous link also failure, episode over')
+                    info ('previous link also failure, episode over')
                     self.episode_over = True
             
         # copy current to previous
