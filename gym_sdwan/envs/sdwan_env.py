@@ -19,16 +19,16 @@ import cfg_load
 import gym
 import numpy as np
 
-from gym_sdwan.envs.mininet_backend import MininetBackEnd
+from gym_sdwan_stat.envs.mininet_stat_backend import MininetStatBackEnd
 
 
 path = 'config.yaml'  # always use slash in packages
-filepath = pkg_resources.resource_filename('gym_sdwan', path)
+filepath = pkg_resources.resource_filename('gym_sdwan_stat', path)
 config = cfg_load.load(filepath)
 logging.config.dictConfig(config['LOGGING'])
 
 
-class SdwanEnv(gym.Env):
+class SdwanStatEnv(gym.Env):
     """
     Define Sdwan environment.
 
@@ -36,7 +36,7 @@ class SdwanEnv(gym.Env):
     availability 
     """
 
-    def __init__(self, max_ticks=30):
+    def __init__(self, max_ticks=300):
         self.__version__ = "0.1.0"
         logging.info("SdwanEnv - Version {}".format(self.__version__))
 
@@ -47,7 +47,7 @@ class SdwanEnv(gym.Env):
         self.LINK_SELECT_ACTION_MPLS = 1
         self.MAX_TICKS = max_ticks
 
-        self.backend = MininetBackEnd(mu=4, sigma=2, link_bw=self.LINK_BW, sla_bw=6, seed=100)
+        self.backend = MininetStatBackEnd(mu=4, sigma=2, link_bw=self.LINK_BW, sla_bw=6, seed=100)
 
         # Define what the agent can do
         # Choose link1 or Link2 
@@ -65,7 +65,7 @@ class SdwanEnv(gym.Env):
 
         # episode over 
         self.episode_over = False
-        
+        self.info = {} 
 
         # Store what the agent tried
         self.curr_episode = -1
@@ -104,35 +104,47 @@ class SdwanEnv(gym.Env):
         self.take_action(action)
         reward = self.get_reward()
         ob = self.get_state()
-        return ob, reward, self.episode_over, {}
+        return ob, reward, self.episode_over, self.info 
 
     def take_action(self, action):
         self.episode_over = self.backend.switch_link(action)
                 
         self.ticks += 1
-        # Stop if max ticks over
-        if self.ticks == self.MAX_TICKS:
+
+        # check if episode ended by ERROR, then mark it in 'info'
+        if self.episode_over:
+            logging.info ('Episode ended by ERROR')
+            self.info['exit_status'] = 'ERROR'
+
+        # else Stop if max ticks over
+        elif self.ticks == self.MAX_TICKS:
             logging.info ('Max ticks over, ending episode')
             self.episode_over = True
+            self.info['exit_status'] = 'NORMAL'
 
     def get_reward(self):
 
         logging.debug('current bw:{0}, sla bw:{1}'.format(self.backend.current_bw, self.backend.sla_bw))
-        # reward for surviving this 'tick'
+
+        # maximum penalty for loosing the episode by ERROR
+        if self.episode_over and self.info['exit_status'] == 'ERROR':
+            return -5
+	
+        # otherwise, reward for surviving this 'tick'
         reward = 1
 
         # every time we use the MPLS link reward is deducted
         if self.backend.active_link == 1:
-            reward -= 2
+            reward -= 1
 
         # check bandwidth for internet link - if less than SLA then penalize
         elif float(self.backend.current_bw)  <   float(self.backend.sla_bw):
             logging.debug('BW is less than SLA')
-            reward -= 5
+            reward -= 2
 
         # everything fine - reward up
         else:
-            reward += 1
+           reward += 2
 
         return reward
 
