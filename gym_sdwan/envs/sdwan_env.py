@@ -19,7 +19,7 @@ import cfg_load
 import gym
 import numpy as np
 
-from gym_sdwan_stat.envs.mininet_stat_backend import MininetStatBackEnd
+from gym_sdwan.envs.mininet_backend import MininetBackEnd
 
 
 path = 'config.yaml'  # always use slash in packages
@@ -28,7 +28,7 @@ config = cfg_load.load(filepath)
 logging.config.dictConfig(config['LOGGING'])
 
 
-class SdwanStatEnv(gym.Env):
+class SdwanEnv(gym.Env):
     """
     Define Sdwan environment.
 
@@ -47,7 +47,7 @@ class SdwanStatEnv(gym.Env):
         self.LINK_SELECT_ACTION_MPLS = 1
         self.MAX_TICKS = max_ticks
 
-        self.backend = MininetStatBackEnd(mu=4, sigma=2, link_bw=self.LINK_BW, sla_bw=6, seed=100)
+        self.backend = MininetBackEnd(mu=4, sigma=2, link_bw=self.LINK_BW, sla_bw=6, seed=100)
 
         # Define what the agent can do
         # Choose link1 or Link2 
