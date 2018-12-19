@@ -209,12 +209,12 @@ class MininetBackEnd(object):
         # if current bandwidth less than SLA it is a failure
         if self.active_link == 0:
             if float(self.current_bw) < float(self.sla_bw):
-                logging.info ('current link failure')
+                info ('current link failure')
                 self.current_link_failure = True
 
                 # if it failed in previous tick also, mark it a link failure
                 if  self.previous_link_failure == True:
-                    logging.info ('previous link also failure, episode over')
+                    info ('previous link also failure, episode over')
                     self.episode_over = True
             
         # copy current to previous
